@@ -1,8 +1,7 @@
 const epxress = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 require('dotenv').config();
-const fetchWeather = require('./fetch');
+const { fetchWeather, fetchWeatherAlerts } = require('./fetch');
 
 const app = epxress();
 
@@ -15,12 +14,29 @@ app.get('/weather', async (req, res) => {
 		const weatherData = await fetchWeather(lat, lng, location);
 
 		if (!weatherData) {
-			return res.sendStatus(404);
+			return res.status(404).json('No weather found');
 		}
 		res.json(weatherData);
 	} catch (e) {
-		console.log(e);
-		res.sendStatus(404);
+		console.error(e);
+		return res.status(400).json({ message: e.message });
+	}
+});
+
+app.get('/weather/alerts', async (req, res) => {
+	const { lat, lng } = req.query;
+
+	try {
+		const weatherAlerts = await fetchWeatherAlerts(lat, lng);
+
+		if (!weatherAlerts) {
+			return res.status(404).json({ message: 'No weather alerts' });
+		}
+
+		return res.json(weatherAlerts);
+	} catch (e) {
+		console.error(e);
+		return res.status(400).json({ message: e.message });
 	}
 });
 
