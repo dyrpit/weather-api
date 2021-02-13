@@ -51,7 +51,7 @@ module.exports = {
 			});
 	}),
 	fetchWeatherHourly: (fetchWeatherAlerts = (lat, lng) => {
-		const URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&exclude=current,minutely,alerts,daily&appid=${process.env.API_KEY}`;
+		const URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=current,minutely,alerts,daily&appid=${process.env.API_KEY}`;
 
 		if (!lat && !lng) {
 			throw new Error('Latitude and longtitude parameters are required');
